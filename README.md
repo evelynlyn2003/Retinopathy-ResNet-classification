@@ -1,24 +1,58 @@
-# 辨識糖尿病視網膜病變影像，進行嚴重度分類
-### A 數據 (Dataset & DataLoader)
-#### 1.資料來源 : Kaggle 糖尿病視網膜病變分級競賽 (diabetic-retinopathy-classification-3) 的資料集。
-https://www.kaggle.com/competitions/diabetic-retinopathy-classification-3/overview
-#### 2.資料規模 : 測試集：1,465 張。訓練/驗證集：共 2,197 張，依據病變嚴重程度分為 0 到 4 個等級
-#### 3.torchvision.transforms，水平/垂直翻轉、隨機仿射變換 (旋轉、縮放、剪切)。
+A. 數據 (Dataset & DataLoader)
+1. 資料來源
 
+Kaggle「Diabetic Retinopathy Classification 3」
+https://www.kaggle.com/competitions/diabetic-retinopathy-classification-3
 
+2. 資料規模
 
+訓練 + 驗證集：2,197 張
 
-### B.模型 (Model)
-#### 1.採用 深度遷移學習 (Deep Transfer Learning)。
-#### 2.使用 ResNet50 預訓練模型，透過殘差塊 (Residual Blocks) 解決了深度網絡訓練中的梯度消失問題。
-#### 3.將基礎 ResNet50 模型的layer1模組，有效防止在小數據集上過度擬合。
+測試集：1,465 張
 
-### C.訓練與優化 (Training)
-#### 1.優化器採用 Adam 優化器，初始學習率1e-5。
+分類標籤：0～4 等級（五類）
 
-### D.結果與評估
-#### 1.kaggle的評分 0.79863
-#### 2.AUC Score (One-vs-Rest) : 0.9347
-#### 3.敏感度 (Sensitivity - Weighted) :80.91%
+3. 影像增強（Data Augmentation）
 
+使用 torchvision.transforms：
 
+水平翻轉（Horizontal Flip）
+
+垂直翻轉（Vertical Flip）
+
+隨機仿射變換（旋轉、縮放、剪切）
+
+B. 模型 (Model)
+1. 使用深度遷移學習 (Deep Transfer Learning)
+
+主架構採用 ResNet50，載入 ImageNet 預訓練權重。
+
+2. 殘差網路 (Residual Blocks)
+
+有效解決深度網路的梯度消失問題，使訓練更穩定。
+
+3. 凍結部分層（Freeze Layers）
+
+將底層特徵抽取 (layer1) 保持固定，避免小型資料集過度擬合。
+
+C. 訓練與優化 (Training)
+1. 損失函數
+
+CrossEntropyLoss
+
+2. 優化器
+
+Adam（初始學習率為 1e-5）
+
+D. 模型結果與效能評估 (Results)
+1. Kaggle Public Score
+
+0.79863
+
+2. AUC Score（One-vs-Rest）
+
+0.9347
+
+3. 敏感度（Sensitivity - Weighted）
+
+80.91%
